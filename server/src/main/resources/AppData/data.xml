@@ -1,0 +1,32 @@
+<linked-list>
+  <organization>
+    <id>1</id>
+    <name>genOrg590</name>
+    <coordinates>
+      <x>0.5428521061202961</x>
+      <y>0.12926072</y>
+    </coordinates>
+    <creationDate>2024-04-01</creationDate>
+    <annualTurnover>0.5730413</annualTurnover>
+    <employeesCount>679</employeesCount>
+    <type>GOVERNMENT</type>
+    <officialAddress>
+      <street>far far away</street>
+    </officialAddress>
+  </organization>
+  <organization>
+    <id>2</id>
+    <name>genOrg4186</name>
+    <coordinates>
+      <x>0.3768210365923321</x>
+      <y>0.612205</y>
+    </coordinates>
+    <creationDate>2024-04-01</creationDate>
+    <annualTurnover>0.39555234</annualTurnover>
+    <employeesCount>790</employeesCount>
+    <type>GOVERNMENT</type>
+    <officialAddress>
+      <street>far far away</street>
+    </officialAddress>
+  </organization>
+</linked-list>
