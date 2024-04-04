@@ -6,7 +6,9 @@ import lombok.Setter;
 import java.util.ResourceBundle;
 
 /**
- * L18n
+ * L18n wrapper.
+ * 
+ * @see ResourceBundle
  */
 public class L18n {
     @Getter @Setter static public ResourceBundle generalBundle;

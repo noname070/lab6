@@ -12,14 +12,16 @@ import ru.noname070.lab6.server.utils.L18n;
 import ru.noname070.lab6.server.collection.data.*;
 
 /**
- * Manager for new elements
+ * new elements creater
+ * 
+ * @deprecated legacy and useless in lab6. only for dev
  */
 public class CreateNewElement {
 
     /**
-     * run new element builder
-     * if {@link Console#getStackSize} empty (means that commands are processed from
-     * the incoming stream) : build step-by-step from incomming stream
+     * run new element builder.
+     * if {@link Console#getStackSize()} empty (means that commands are processed from
+     * the incoming stream) : build step-by-step from incomming stream.
      * else : process stack to load data
      */
     public static Organization newElement() {
@@ -33,10 +35,11 @@ public class CreateNewElement {
     /**
      * bully loads data from stack
      * 
-     * @see {@link CreateNewElement#newElement}
+     * @see {@link #newElement}
+     * @apiNote Warning. if stack is not full - runtime error; recomend - redirect
+     *          the stream to {@link #fromInput}, thereby saving checks
      */
-    public static Organization fromStack() { // warning : if stack is not full - runtime error; recomend : redirect the
-                                             // stream to .fromInput(), thereby saving checks
+    public static Organization fromStack() {
         Organization org = new Organization();
         org.setName(Console.getLastCommandLine());
         org.setCoordinates(new Coordinates(
@@ -50,17 +53,16 @@ public class CreateNewElement {
             return org;
         } else {
             Console.getConsolePrintStream().println(L18n.getGeneralBundle().getString("create.err.incorrect_value"));
-            System.exit(-1); // TODO какая то шляпа получается (
+            System.exit(-1);
             return null; // for vscode
         }
     }
 
     /**
-     * loads data from console input stream, with all checkings
+     * ƒlex type of {@link #fromInput}
      * 
-     * @see {@link CreateNewElement#newElement}
+     * @see {@link #newElement}
      */
-
     public static Organization fromInputEx() {
         Organization org = new Organization();
         Coordinates cords = new Coordinates();
@@ -119,7 +121,7 @@ public class CreateNewElement {
         } while (!checker(null,
                 localScanner,
                 org::setType,
-                type -> true, // TODO lmao
+                type -> true, // lmao
                 type -> OrganizationType.valueOf(type.toUpperCase()),
                 "create.err.incorrect_value"));
 
@@ -137,6 +139,11 @@ public class CreateNewElement {
 
     }
 
+    /**
+     * flex style of {@link #fromInput}
+     *
+     * @return boolean input correct
+     */
     private static <R> boolean checker(String bundleContext,
             Scanner scannerInput,
             Consumer<R> setter,
@@ -167,6 +174,12 @@ public class CreateNewElement {
 
     }
 
+    /**
+     * create new org element from inputline
+     * @deprecated legacy code
+     * 
+     * @return `Organization` element
+     */
     public static Organization fromInput() {
 
         Organization org = new Organization();
@@ -280,13 +293,16 @@ public class CreateNewElement {
         return org;
     }
 
-    // DEV ONLY
+    /**
+     * @apiNote for dev only.
+     * @return randomly generated {@link Organization}
+     */
     public static Organization genRandom() {
         Organization org = new Organization();
         Random rnd = new Random();
 
         org.setName("genOrg" + rnd.nextInt(9999));
-        org.setCoordinates(new Coordinates(rnd.nextDouble(), rnd.nextFloat()));
+        org.setCoordinates(new Coordinates(rnd.nextDouble() * rnd.nextInt(1000), rnd.nextFloat() * rnd.nextInt(1000)));
         org.setAnnualTurnover(rnd.nextFloat());
         org.setEmployeesCount(rnd.nextInt(999));
         org.setType(OrganizationType.GOVERNMENT);

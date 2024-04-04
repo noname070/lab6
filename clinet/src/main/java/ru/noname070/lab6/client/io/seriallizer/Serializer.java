@@ -11,13 +11,13 @@ import com.thoughtworks.xstream.security.NullPermission;
 import com.thoughtworks.xstream.security.PrimitiveTypePermission;
 
 /**
- * 
+ * serialization of a collection to xml and back
  */
 public class Serializer {
     private final XStream xstream;
 
     /**
-     * 
+     * Default construct
      */
     public Serializer() {
         xstream = new XStream();
@@ -26,8 +26,6 @@ public class Serializer {
         xstream.alias("coordinates", Coordinates.class);
         xstream.alias("organization", Organization.class);
         xstream.alias("organizationType", OrganizationType.class);
-
-        // xstream.addImplicitCollection(CollectionManager.class, "data");
 
         xstream.setMode(XStream.NO_REFERENCES);
         xstream.addPermission(NoTypePermission.NONE);
@@ -42,8 +40,8 @@ public class Serializer {
     /**
      * serialize LinkedList {@link Organization} collection to xml
      * 
-     * @param organization : current collection
-     * @return rawData : serialized string
+     * @param organization current collection
+     * @return rawData serialized string
      */
     public String serialize(Organization organization) {
         String rawData = xstream.toXML(organization);
@@ -53,7 +51,7 @@ public class Serializer {
     /**
      * deserialize xml to LinkedList {@link Organization} collection
      * 
-     * @param rawData : raw string from xml
+     * @param rawData raw string from xml
      */
     public LinkedList<Organization> deserialize(String rawData) {
         xstream.setMode(XStream.NO_REFERENCES);

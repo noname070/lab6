@@ -11,6 +11,7 @@ import ru.noname070.lab6.server.console.CreateNewElement;
  * 
  * @see AbstractCommand
  */
+@SuppressWarnings("deprecation")
 public class Add extends AbstractCommand {
 
     public Add() {

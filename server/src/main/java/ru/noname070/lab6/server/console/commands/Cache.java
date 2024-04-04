@@ -15,15 +15,15 @@ import ru.noname070.lab6.server.utils.L18n;
 import ru.noname070.lab6.server.console.Console;
 
 /**
- * Wrapper class for cache-like commands
- * Note : not used on server
+ * Wrapper class for cache-like commands. Useless in lab6 on server side
+ * @deprecated client-side realisation
  * @see AbstractCommand
  */
 public class Cache {
 
     /**
      * Realisation for "start_cache" command
-     * 
+     * @deprecated client-side realisation
      * @see AbstractCommand
      * @see Cache
      */
@@ -43,7 +43,7 @@ public class Cache {
 
     /**
      * Realisation for "save_cache" command
-     * 
+     * @deprecated client-side realisation
      * @see AbstractCommand
      * @see Cache
      */

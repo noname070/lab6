@@ -6,6 +6,7 @@ import ru.noname070.lab6.server.console.Console;
 
 /**
  * Realisation for "save" command
+ * 
  * @see AbstractCommand
  */
 public class Save extends AbstractCommand {

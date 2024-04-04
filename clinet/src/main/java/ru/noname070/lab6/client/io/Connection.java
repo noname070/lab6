@@ -20,19 +20,24 @@ import ru.noname070.lab6.client.io.seriallizer.Serializer;
 import ru.noname070.lab6.client.utils.L18n;
 
 /**
- * Connection
+ * connection`nd`communication with the server
  */
 public class Connection {
-    @Getter
-    private Socket connection;
-    @Getter
-    private HashSet<String> commands;
+    @Getter private Socket connection;
+    @Getter private HashSet<String> commands;
     private BufferedWriter out;
     private BufferedReader in;
 
     // private boolean isWorking = true;
     private static Gson gson = new GsonBuilder().create();
 
+    /**
+     * default construct
+     * 
+     * @param host
+     * @param port 0x0 - 0xffff ports
+     * @apiNote also can stop your app xd
+     */
     public Connection(String host, int port) {
         try {
             this.connection = new Socket(host, port);
@@ -56,9 +61,9 @@ public class Connection {
     }
 
     /**
-     * [processCommand description]
-     *
-     * @return void [return description]
+     * processes command, sends it to the server and receives the response
+     * 
+     * @param args clear input from console
      * @throws IOException
      */
     public void processCommand(String args[]) throws IOException {
@@ -79,7 +84,7 @@ public class Connection {
         }
 
         if (command.getName().equals("add")) {
-            if (!command.getArgs().equals("devrnd"))
+            if (!command.getArgs().equals("devrnd")) // dev only
                 command.setOrg(new Serializer().serialize(NewElementHandler.newElement()));
         }
 
@@ -93,7 +98,7 @@ public class Connection {
             this.out.write(gson.toJson(command) + "\n");
             this.out.flush();
 
-            // System.out.println(this.in.lines().toString());
+            //костылек, но иначе надо запариваться с буффером 
             System.out.println(this.in.readLine().replace("|||", "\n"));
         } catch (JsonIOException e) {
             System.err.println(L18n.getGeneralBundle().getString("json.err.cant_ser"));
@@ -104,6 +109,10 @@ public class Connection {
 
     }
 
+    /**
+     * check connection status
+     * @return connction colosed ? false : true
+     */
     public boolean isWorking() {
         return !this.connection.isClosed();
     }

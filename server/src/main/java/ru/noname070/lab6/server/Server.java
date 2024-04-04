@@ -40,7 +40,7 @@ public class Server {
                     currentLocale = new Locale(args[2].equals("ru") ? "ru_RU" : "en_EN");
 
                     // default:
-                    // throw new IllegalArgumentException("Wrong args. Use `java -jar client.jar
+                    // throw new IllegalArgumentException("Wrong args. Use `java -jar server.jar
                     // HOST PORT [LOCALE[ru|en]]`");
                 default:
                     host = "localhost";

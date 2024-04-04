@@ -11,15 +11,15 @@ import com.thoughtworks.xstream.security.PrimitiveTypePermission;
 import ru.noname070.lab6.server.collection.data.*;
 
 /**
- * ExperementalSerializer for LinkedList to/from xml
- * 
+ * ExperementalSerializer for LinkedList to/from xml.
+ * @hidden why experemental? idk, more correctly "v2"
  * @see Organization
  */
 public class ExperementalSerializer {
     private final XStream xstream;
 
     /**
-     * Common constructor to i/o with {@link Organization}
+     * Common constructor to {@link Organization} serialization
      */
     public ExperementalSerializer() {
         xstream = new XStream();
@@ -28,10 +28,6 @@ public class ExperementalSerializer {
         xstream.alias("coordinates", Coordinates.class);
         xstream.alias("organization", Organization.class);
         xstream.alias("organizationType", OrganizationType.class);
-
-        // xstream.addImplicitCollection(CollectionManager.class, "data"); // ЕБАНЫЕ
-        // РАЗРАБОТЧИКИ КУСКА ГОВНА КОТОРОЕ В ЦИКЛЕ WHILE СИДИТ ПЕРЕБИРАЕТ НЕ-СТАТИК
-        // АТРИБУТЫ У КОНТЕЙНЕРА ПОШЛИ НАХУЙ
 
         xstream.setMode(XStream.NO_REFERENCES);
         xstream.addPermission(NoTypePermission.NONE);
@@ -46,8 +42,8 @@ public class ExperementalSerializer {
     /**
      * serialize LinkedList {@link Organization} collection to xml
      * 
-     * @param data : current collection
-     * @return rawData : record-ready string
+     * @param data current collection
+     * @return rawData record-ready string
      */
     public String serialize(LinkedList<Organization> data) {
         String rawData = xstream.toXML(data);
@@ -57,7 +53,8 @@ public class ExperementalSerializer {
     /**
      * deserialize xml to LinkedList {@link Organization} collection
      * 
-     * @param rawData : raw string from xml file
+     * @param rawData       raw string in xml
+     * @param FLAG_toLinked flag, if needs to process LinkedList
      */
     @SuppressWarnings("unchecked")
     public LinkedList<Organization> deserialize(String rawData, boolean FLAG_toLinked) {
@@ -73,6 +70,11 @@ public class ExperementalSerializer {
         return (LinkedList<Organization>) xstream.fromXML(rawData);
     }
 
+    /**
+     * deserialize xml to {@link Organization} element
+     * 
+     * @param rawData raw string in xml
+     */
     public Organization deserialize(String rawData) {
         xstream.setMode(XStream.NO_REFERENCES);
         xstream.addPermission(NoTypePermission.NONE);

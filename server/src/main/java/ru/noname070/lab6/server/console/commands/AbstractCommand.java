@@ -9,25 +9,20 @@ import ru.noname070.lab6.server.collection.data.Organization;
 import ru.noname070.lab6.server.console.Console;
 
 /**
- * command implementation super-class
+ * command super-class.
  * one of the execute methods must be overridden
- * 
- * @see ICommand
  */
-public abstract class AbstractCommand implements ICommand {
-    @Getter
-    private String name;
-    @Getter
-    private String description;
-    @Getter
-    private boolean needArgs = false;
+public abstract class AbstractCommand {
+    @Getter private String name;
+    @Getter private String description;
+    @Getter private boolean needArgs = false;
 
     /**
      * Common constructor
      * 
-     * @param name        : command name
-     * @param description : command description
-     * @param needArgs    : flag, command need args? true : fale
+     * @param name         command name
+     * @param description  command description
+     * @param needArgs     command need args? true : fale
      */
     public AbstractCommand(String name, String description, boolean needArgs) {
         this.name = name;
@@ -70,7 +65,7 @@ public abstract class AbstractCommand implements ICommand {
     }
 
     /*
-     * common execute with org
+     * common execute with org param
      */
     public void execute(Organization org) {
         if (this.needArgs) {

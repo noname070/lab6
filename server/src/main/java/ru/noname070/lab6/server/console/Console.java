@@ -23,19 +23,11 @@ import ru.noname070.lab6.server.utils.ExperementalSerializer;
 public class Console {
     @Getter
     private static final HashMap<String, AbstractCommand> commandList = new HashMap<String, AbstractCommand>();
-    // private boolean isWorking = true;
+    private static final Gson gson = new GsonBuilder().create();
 
-    private static Gson gson = new GsonBuilder().create();
-    @Getter
-    @Setter
-    private static ArrayDeque<String> commandLines = new ArrayDeque<String>();
-
-    @Getter
-    @Setter
-    private static InputStream consoleInputStream = System.in;
-    @Getter
-    @Setter
-    private static PrintStream consolePrintStream = System.out;
+    @Getter @Setter private static ArrayDeque<String> commandLines = new ArrayDeque<String>();
+    @Getter @Setter private static InputStream consoleInputStream = System.in;
+    @Getter @Setter private static PrintStream consolePrintStream = System.out;
 
     static {
         commandList.put("help", new Help());
@@ -59,7 +51,7 @@ public class Console {
     }
 
     /**
-     * get&remove last command line from the stack
+     * get and remove last command line from the stack
      * 
      * @return command line
      */
@@ -112,7 +104,7 @@ public class Console {
                 org = new ExperementalSerializer().deserialize(commandOrg);
             }
 
-            ICommand command = Console.commandList.get(commandName);
+            AbstractCommand command = Console.commandList.get(commandName);
             if (command == null) {
                 Console.getConsolePrintStream().println("");
                 return;

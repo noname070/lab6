@@ -9,8 +9,8 @@ import ru.noname070.lab6.server.utils.L18n;
 import ru.noname070.lab6.server.console.Console;
 
 /**
- * Realisation for "execute_script" command
- * 
+ * Realisation for "execute_script" command. Useless in lab6 on server side
+ * @deprecated client-side realisation
  * @see AbstractCommand
  */
 

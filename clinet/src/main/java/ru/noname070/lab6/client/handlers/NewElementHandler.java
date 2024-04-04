@@ -15,7 +15,16 @@ import ru.noname070.lab6.client.data.Coordinates;
 import ru.noname070.lab6.client.data.Organization;
 import ru.noname070.lab6.client.data.OrganizationType;
 
+
+/**
+ * static for new element creating
+ */
 public class NewElementHandler {
+    
+    /**
+     * core method. receives user input (n times) and fills in a new element.
+     * uses {@link #checker}
+     */
     public static Organization newElement() {
 
         Organization org = new Organization();
@@ -75,7 +84,7 @@ public class NewElementHandler {
         } while (!checker(null,
                         localScanner,
                         org::setType,
-                        type -> true,
+                        type -> true, //ну да костыль, зато код работает и главное к р а с и в о
                         type -> OrganizationType.valueOf(type.toUpperCase()),
                         "create.err.incorrect_value"));
 
@@ -92,6 +101,24 @@ public class NewElementHandler {
         return org;
     }
 
+    /**
+     * A basic pipline for entering, checking and adding parts of a new element
+     * 
+     * invented for FLEX ONLY. but the code is shorter.
+     * 
+     * @param <R> parameterized type of part for a new element 
+     * @param bundleContext what the console asks the user. for the {@link L18n}.
+     * @param scannerInput {@link Scanner} obj
+     * @param setter sets the new parameterized object to the correct place
+     * @param condition input check
+     * @param preparing make a string into a parameterized object
+     * @param errBundle what the console asks the user in error. for the {@link L18n}.
+     * @return condition met ? true : false 
+     * 
+     * @see Organization
+     * @see L18n
+     * 
+     */
     private static <R> boolean checker( String bundleContext,
                                         Scanner scannerInput,
                                         Consumer<R> setter,

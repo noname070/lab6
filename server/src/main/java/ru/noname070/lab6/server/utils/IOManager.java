@@ -8,15 +8,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 /**
- * file i/o manager
+ * file i/o
  */
 public class IOManager {
 
     /**
      * write raw data to file
      *
-     * @param filePath : path2file
-     * @param rawData  : data to write
+     * @param filePath path2file
+     * @param rawData  data to write
      * 
      * @throws IOException
      */
@@ -31,8 +31,8 @@ public class IOManager {
     /**
      * add raw data to file
      *
-     * @param filePath : path2file
-     * @param rawData  : data to add
+     * @param filePath path2file
+     * @param rawData  data to add
      * 
      * @throws IOException
      */
@@ -47,7 +47,7 @@ public class IOManager {
     /**
      * read raw data to file
      *
-     * @param filePath : path2file
+     * @param filePath path2file
      * @throws IOException
      */
     public static String readFromFile(String filePath) throws IOException {
@@ -61,7 +61,7 @@ public class IOManager {
     /**
      * checks the file for accessibility
      *
-     * @param filePath : path2file
+     * @param filePath path2file
      */
     public static boolean checkFile(String filePath) {
         File f = new File(filePath);

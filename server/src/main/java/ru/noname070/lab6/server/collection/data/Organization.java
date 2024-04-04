@@ -31,7 +31,7 @@ public class Organization implements Comparable<Organization> {
     @Getter @Setter private Address officialAddress; // Поле не может быть null
 
     /**
-     * Defautl constructor
+     * Defautl constructor. 
      * data fills gradually
      */
     public Organization() {
