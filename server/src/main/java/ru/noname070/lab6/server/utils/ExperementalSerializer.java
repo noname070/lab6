@@ -8,6 +8,7 @@ import com.thoughtworks.xstream.security.NoTypePermission;
 import com.thoughtworks.xstream.security.NullPermission;
 import com.thoughtworks.xstream.security.PrimitiveTypePermission;
 
+import lombok.extern.slf4j.Slf4j;
 import ru.noname070.lab6.server.collection.data.*;
 
 /**
@@ -15,6 +16,7 @@ import ru.noname070.lab6.server.collection.data.*;
  * @hidden why experemental? idk, more correctly "v2"
  * @see Organization
  */
+@Slf4j
 public class ExperementalSerializer {
     private final XStream xstream;
 
@@ -46,6 +48,7 @@ public class ExperementalSerializer {
      * @return rawData record-ready string
      */
     public String serialize(LinkedList<Organization> data) {
+        log.info("serialize data to file");
         String rawData = xstream.toXML(data);
         return rawData;
     }
@@ -58,6 +61,7 @@ public class ExperementalSerializer {
      */
     @SuppressWarnings("unchecked")
     public LinkedList<Organization> deserialize(String rawData, boolean FLAG_toLinked) {
+        log.info("deserialize data to linkedList of elements");
         xstream.setMode(XStream.NO_REFERENCES);
         xstream.addPermission(NoTypePermission.NONE);
         xstream.addPermission(NullPermission.NULL);
@@ -76,6 +80,7 @@ public class ExperementalSerializer {
      * @param rawData raw string in xml
      */
     public Organization deserialize(String rawData) {
+        log.info("deserialize data to element");
         xstream.setMode(XStream.NO_REFERENCES);
         xstream.addPermission(NoTypePermission.NONE);
         xstream.addPermission(NullPermission.NULL);

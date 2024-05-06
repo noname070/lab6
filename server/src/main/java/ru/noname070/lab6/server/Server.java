@@ -15,10 +15,12 @@ import java.util.ResourceBundle;
 
 import javax.xml.bind.JAXBException;
 
+import lombok.extern.slf4j.Slf4j;
 import ru.noname070.lab6.server.collection.CollectionManager;
 import ru.noname070.lab6.server.console.Console;
 import ru.noname070.lab6.server.utils.L18n;
 
+@Slf4j
 public class Server {
 
     private static String host;
@@ -26,6 +28,7 @@ public class Server {
     private static Locale currentLocale;
 
     public static void main(String[] args) throws UnknownHostException, IOException {
+        log.info("Start server");
         // helios adaptation
         try {
             switch (args.length) {
@@ -48,16 +51,19 @@ public class Server {
                     currentLocale = new Locale("en_EN");
             }
         } catch (Exception e) {
+            log.error(e.getMessage());
             e.printStackTrace();
             System.exit(1);
         }
 
         L18n.setGeneralBundle(ResourceBundle.getBundle("l18n/GeneralBundle", currentLocale));
         CollectionManager.loadData();
+        log.info("data loaded");
 
         System.out.println(L18n.getGeneralBundle().getString("serv.log.start"));
 
         try (ServerSocket serverSocket = new ServerSocket(port, 100, InetAddress.getByName(host))) {
+            log.info("new server socker %s", serverSocket.toString());
             while (!serverSocket.isClosed()) {
                 try (Socket client = serverSocket.accept();
                         BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -66,6 +72,8 @@ public class Server {
                     // Deadmou5
                     // System.setOut( new PrintStream(client.getOutputStream()) );
 
+                    log.info("new client! InetAddress:" + client.getInetAddress());
+
                     Console.setConsolePrintStream(new PrintStream(client.getOutputStream()));
                     System.out.println(
                             L18n.getGeneralBundle().getString("serv.log.new_client") + " " + client.toString());
@@ -73,6 +81,7 @@ public class Server {
                     String text = "";
                     do {
                         text = in.readLine();
+                        log.info("new msg from clinet{%s} : %s", client.toString(), text);
                         System.out.println(L18n.getGeneralBundle().getString("serv.log.msg_from_client") + text);
 
                         if (text == null) {
@@ -95,8 +104,10 @@ public class Server {
                         }
 
                     } while (!text.equals("exit"));
+                    log.info("client %s disconnected", client.toString() );
                     System.out.println(L18n.getGeneralBundle().getString("serv.err.closed"));
                     CollectionManager.saveData();
+                    log.info("saved data");
                 }
             }
         }

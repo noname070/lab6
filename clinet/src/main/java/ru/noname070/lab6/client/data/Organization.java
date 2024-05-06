@@ -3,6 +3,7 @@ package ru.noname070.lab6.client.data;
 import java.util.Arrays;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,7 @@ import java.io.Serializable;
  * @see Address
  */
 @XmlRootElement
+@Data
 public class Organization implements Comparable<Organization>, Serializable {
 
     @SuppressWarnings("unused") // NOTE : need for good serialization

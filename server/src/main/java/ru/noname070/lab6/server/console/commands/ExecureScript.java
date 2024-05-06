@@ -23,7 +23,7 @@ public class ExecureScript extends AbstractCommand {
     private static HashSet<String> filesToExecute = new HashSet<String>();
 
     public ExecureScript() {
-        super("excute script", L18n.getGeneralBundle().getString("command.execute_script.description"), true);
+        super("excute script", L18n.getGeneralBundle().getString("command.execute_script.description"), true, false);
 
     }
 

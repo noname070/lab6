@@ -4,11 +4,13 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.ArrayDeque;
 import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import lombok.NoArgsConstructor;
 import javax.xml.bind.JAXBException;
 import ru.noname070.lab6.server.collection.data.Organization;
@@ -20,9 +22,9 @@ import ru.noname070.lab6.server.utils.ExperementalSerializer;
  * processes a sequence of commands
  */
 @NoArgsConstructor
+@Slf4j
 public class Console {
-    @Getter
-    private static final HashMap<String, AbstractCommand> commandList = new HashMap<String, AbstractCommand>();
+    @Getter private static final Map<String, AbstractCommand> commandList = new HashMap<String, AbstractCommand>();
     private static final Gson gson = new GsonBuilder().create();
 
     @Getter @Setter private static ArrayDeque<String> commandLines = new ArrayDeque<String>();
@@ -37,7 +39,7 @@ public class Console {
         commandList.put("update", new Update());
         commandList.put("remove_by_id", new Remove.RemoveById());
         commandList.put("clear", new Clear());
-        commandList.put("save", new Save());
+        // commandList.put("save", new Save());
         // commandList.put("execute_script", new ExecureScript());
         // commandList.put("exit", new Exit());
         commandList.put("remove_last", new Remove.RemoveLast());
@@ -56,6 +58,7 @@ public class Console {
      * @return command line
      */
     public static String getLastCommandLine() {
+        log.info("removed last inputLine");
         return Console.commandLines.removeLast();
     }
 
@@ -65,6 +68,7 @@ public class Console {
      * @param inputLine : input line
      */
     public static void addCommand(String inputLine) {
+        log.info("add new inputLine :" + inputLine);
         Console.commandLines.addFirst(inputLine);
     }
 
@@ -81,6 +85,7 @@ public class Console {
      * @return stack size
      */
     public static int getStackSize() {
+        log.info("current stack size :" + Console.commandLines.size());
         return Console.commandLines.size();
     }
 
@@ -90,8 +95,10 @@ public class Console {
      * @throws JAXBException
      */
     public static void processStack() throws JAXBException {
+        log.info("start to processing stack of inputline");
         while (!Console.commandLines.isEmpty()) {
             String inputLine = Console.commandLines.removeLast();
+            log.info("current inputLine :" + inputLine);
 
             Command inputCommand = gson.fromJson(inputLine, Command.class);
 
@@ -99,6 +106,8 @@ public class Console {
             String commandArgs = inputCommand.getArgs();
             Organization org = null;
             String commandOrg = inputCommand.getOrg();
+
+            log.info("deserialized command : %s[name=%s;args=%s;org=%s]", inputCommand.toString(), commandName, commandArgs, commandOrg);
 
             if (commandOrg != null) {
                 org = new ExperementalSerializer().deserialize(commandOrg);
@@ -109,6 +118,13 @@ public class Console {
                 Console.getConsolePrintStream().println("");
                 return;
             }
+
+            if (command.isNeedOrg() && org==null) {
+                Console.getConsolePrintStream().println("dd_need_collection");
+                Console.commandLines.addLast(inputLine);
+                continue;
+            }
+
             if (commandArgs != null) {
                 command.execute(commandArgs);
             } else if (org != null) {

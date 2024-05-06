@@ -3,6 +3,9 @@ package ru.noname070.lab6.server.utils;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.FileInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -10,6 +13,7 @@ import java.io.FileOutputStream;
 /**
  * file i/o
  */
+@Slf4j
 public class IOManager {
 
     /**
@@ -25,6 +29,7 @@ public class IOManager {
             byte[] bytes = rawData.getBytes();
             bOutputStream.write(bytes);
             bOutputStream.close();
+            log.info("data->file in " + filePath);
         }
     }
 
@@ -41,6 +46,7 @@ public class IOManager {
             byte[] bytes = (rawData + "\n").getBytes();
             bOutputStream.write(bytes);
             bOutputStream.close();
+            log.info("add new data to " + filePath);
         }
     }
 
@@ -54,6 +60,7 @@ public class IOManager {
         try (BufferedInputStream bInputStream = new BufferedInputStream(new FileInputStream(filePath))) {
             byte[] bytes = bInputStream.readAllBytes();
             bInputStream.close();
+            log.info("read rawData from file " + filePath);
             return new String(bytes);
         }
     }
@@ -65,6 +72,7 @@ public class IOManager {
      */
     public static boolean checkFile(String filePath) {
         File f = new File(filePath);
+        log.info("Checking access to file " + f.getAbsolutePath());
         return f.canRead() & f.canWrite() & f.isFile() & f.exists();
     }
 

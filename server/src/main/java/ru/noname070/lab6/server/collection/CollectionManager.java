@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import lombok.Getter;
-
+import lombok.extern.slf4j.Slf4j;
 import ru.noname070.lab6.server.utils.L18n;
 import ru.noname070.lab6.server.collection.data.Organization;
 import ru.noname070.lab6.server.console.Console;
@@ -16,6 +16,7 @@ import ru.noname070.lab6.server.utils.IOManager;
  * 
  * @see Organization
  */
+@Slf4j
 public class CollectionManager {
     @Getter public static LinkedList<Organization> data = new LinkedList<Organization>();
     private static String FILE_PATH = "src/main/resources/AppData/data.xml"; 
@@ -27,15 +28,18 @@ public class CollectionManager {
      * @see ExperementalSerializer
      */
     public static void loadData() {
+        log.info("loading data");
         String rawData;
         int maxId = 1;
         try {
             if (!IOManager.checkFile(FILE_PATH)) {
+                log.error("oopps, no file with path " + FILE_PATH);
                 Console.getConsolePrintStream().println(L18n.getGeneralBundle().getString("cm.err.cant_io") + "\"" + FILE_PATH + "\" ");
                 System.exit(-1);
             }
             rawData = IOManager.readFromFile(FILE_PATH);
             if (rawData.isEmpty()) {
+                log.error("file " + FILE_PATH + " is empty" );
                 Console.getConsolePrintStream().println(String.format(L18n.getGeneralBundle().getString("cm.err.empty"), FILE_PATH));
             } else {
                 try {
@@ -56,11 +60,14 @@ public class CollectionManager {
                     maxId = Math.max(org.getId(), maxId);
                 }
                 Organization.setNextId(maxId+1);
+                log.info("New id to collection: " + maxId+1);
 
                 System.out.println(String.format(L18n.getGeneralBundle().getString("cm.data.from_loaded"), FILE_PATH));
+                log.info("Data loaded");
             }
 
         } catch (IOException e) {
+            log.error("Can`t i/o with data", e);
             System.err.println(L18n.getGeneralBundle().getString("cm.err.cant_io") + " \"" + FILE_PATH + "\"");
             System.exit(-1);
         }

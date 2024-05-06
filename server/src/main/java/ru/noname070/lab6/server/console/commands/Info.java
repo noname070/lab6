@@ -1,6 +1,7 @@
 package ru.noname070.lab6.server.console.commands;
 
 import ru.noname070.lab6.server.utils.L18n;
+import lombok.extern.slf4j.Slf4j;
 import ru.noname070.lab6.server.collection.CollectionManager;
 import ru.noname070.lab6.server.console.Console;
 
@@ -9,19 +10,22 @@ import ru.noname070.lab6.server.console.Console;
  * 
  * @see AbstractCommand
  */
+@Slf4j
 public class Info extends AbstractCommand {
 
     public Info() {
-        super("info", L18n.getGeneralBundle().getString("command.info.description"), false);
+        super("info", L18n.getGeneralBundle().getString("command.info.description"), false, false);
     }
 
     @Override
     public void execute() {
+        log.info("executed command '" + getName() + "'");
         if (!CollectionManager.getData().isEmpty()) {
             Console.getConsolePrintStream().printf(L18n.getGeneralBundle().getString("command.info.execute"),
                     CollectionManager.getData().getClass().getName(),
                     CollectionManager.getData().size());
         } else {
+            log.error("Empty data");
             Console.getConsolePrintStream().println(L18n.getGeneralBundle().getString("command.err.empty"));
         }
     }

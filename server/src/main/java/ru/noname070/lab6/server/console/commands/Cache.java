@@ -30,7 +30,7 @@ public class Cache {
     public static class StartCache extends AbstractCommand {
 
         public StartCache() {
-            super("start_cache", L18n.getGeneralBundle().getString("command.start_cache.description"), false);
+            super("start_cache", L18n.getGeneralBundle().getString("command.start_cache.description"), false, false);
         }
 
         @Override
@@ -50,7 +50,7 @@ public class Cache {
     public static class SaveCache extends AbstractCommand {
 
         public SaveCache() {
-            super("save_cache", L18n.getGeneralBundle().getString("command.save_cache.description"), false);
+            super("save_cache", L18n.getGeneralBundle().getString("command.save_cache.description"), false, false);
         }
 
         @Override

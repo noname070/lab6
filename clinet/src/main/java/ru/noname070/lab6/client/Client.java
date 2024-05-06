@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import org.apache.commons.lang3.StringUtils;
 
+import ru.noname070.lab6.client.io.Authform;
 import ru.noname070.lab6.client.io.Connection;
 import ru.noname070.lab6.client.utils.L18n;
 
@@ -49,7 +50,6 @@ public class Client {
         }
 
         L18n.setGeneralBundle(ResourceBundle.getBundle("l18n/GeneralBundle", Client.currentLocale));
-        connection = new Connection(host, port);
 
         @SuppressWarnings("resource")
         Scanner scanner = new Scanner(System.in);
@@ -58,7 +58,7 @@ public class Client {
                 System.out.print("|<lab6>| >");
                 String input = scanner.nextLine();
                 if (!input.isEmpty()) {
-                    connection.processCommand(StringUtils.split(input.trim()));
+                    connection.processCommand(StringUtils.split(input.strip()));
                 }
 
             } catch (Exception e) {

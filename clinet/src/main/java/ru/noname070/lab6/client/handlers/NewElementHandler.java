@@ -1,6 +1,8 @@
 package ru.noname070.lab6.client.handlers;
 
 import java.util.Scanner;
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.function.Consumer;
@@ -10,29 +12,29 @@ import java.util.function.Predicate;
 import org.apache.commons.lang3.StringUtils;
 
 import ru.noname070.lab6.client.utils.L18n;
-import ru.noname070.lab6.client.data.Address;
-import ru.noname070.lab6.client.data.Coordinates;
-import ru.noname070.lab6.client.data.Organization;
-import ru.noname070.lab6.client.data.OrganizationType;
-
+import ru.noname070.lab6.client.data.*;
 
 /**
  * static for new element creating
  */
 public class NewElementHandler {
-    
+    private static InputStream in;
+    private static PrintStream out;
     /**
      * core method. receives user input (n times) and fills in a new element.
      * uses {@link #checker}
      */
-    public static Organization newElement() {
+    public static Organization newElement(InputStream currin, PrintStream currout) {
+
+        in = currin;
+        out = currout;
 
         Organization org = new Organization();
         Coordinates cords = new Coordinates();
 
-        Scanner localScanner = new Scanner(System.in);
-
-        System.out.println(L18n.getGeneralBundle().getString("create.organization.new_element"));
+        Scanner localScanner = new Scanner(in);
+        
+        out.println(L18n.getGeneralBundle().getString("create.organization.new_element"));
         while (!checker("create.organization.name",
                         localScanner,
                         org::setName,
@@ -41,7 +43,7 @@ public class NewElementHandler {
                         null)) {
         }
 
-        System.out.println(L18n.getGeneralBundle().getString("create.coordinates.new_element"));
+        out.println(L18n.getGeneralBundle().getString("create.coordinates.new_element"));
         while (!checker("create.coordinates.x",
                         localScanner,
                         cords::setX,
@@ -57,7 +59,7 @@ public class NewElementHandler {
                         "create.err.nums_only")) {
         }
         org.setCoordinates(cords);
-        System.err.println(L18n.getGeneralBundle().getString("create.coordinates.complete"));
+        out.println(L18n.getGeneralBundle().getString("create.coordinates.complete"));
 
         while (!checker("create.organization.annualTurnover",
                         localScanner,
@@ -75,7 +77,7 @@ public class NewElementHandler {
         }
 
         do {
-            System.out.printf(
+            out.printf(
                 L18n.getGeneralBundle().getString("create.organization.orgType") + " >",
                         Arrays.stream(OrganizationType.values())
                                 .map(Object::toString)
@@ -88,7 +90,7 @@ public class NewElementHandler {
                         type -> OrganizationType.valueOf(type.toUpperCase()),
                         "create.err.incorrect_value"));
 
-        System.out.println(L18n.getGeneralBundle().getString("create.address.new_element"));
+        out.println(L18n.getGeneralBundle().getString("create.address.new_element"));
         while (!checker("create.address.street",
                         localScanner,
                         org::setOfficialAddress, 
@@ -96,7 +98,7 @@ public class NewElementHandler {
                         Address::new,
                         "create.err.incorrect_value")) {
         }
-        System.out.println(L18n.getGeneralBundle().getString("create.address.complete"));
+        out.println(L18n.getGeneralBundle().getString("create.address.complete"));
 
         return org;
     }
@@ -112,7 +114,7 @@ public class NewElementHandler {
      * @param setter sets the new parameterized object to the correct place
      * @param condition input check
      * @param preparing make a string into a parameterized object
-     * @param errBundle what the console asks the user in error. for the {@link L18n}.
+     * @param errBundle what the console asks the user in error. for the {@link L18n}.у
      * @return condition met ? true : false 
      * 
      * @see Organization
@@ -125,7 +127,7 @@ public class NewElementHandler {
                                         Predicate<String> condition,
                                         Function<String, R> preparing,
                                         String errBundle) {
-        if (bundleContext != null) System.out.print(L18n.getGeneralBundle().getString(bundleContext) + " >");
+        if (bundleContext != null) out.print(L18n.getGeneralBundle().getString(bundleContext) + " >");
         String input = scannerInput.nextLine();
         String err = errBundle != null ? L18n.getGeneralBundle().getString(errBundle) + "\n" : "";
         try {
@@ -134,10 +136,10 @@ public class NewElementHandler {
                 setter.accept(out);
                 return true;
             } else
-                System.err.print(err);
+                out.print(err);
             return false;
         } catch (Exception e) {
-            System.err.print(err);
+            out.print(err);
             return false;
         }    
     }

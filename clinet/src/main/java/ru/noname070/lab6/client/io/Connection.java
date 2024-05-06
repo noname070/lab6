@@ -7,7 +7,6 @@ import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.HashSet;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -24,28 +23,24 @@ import ru.noname070.lab6.client.utils.L18n;
  */
 public class Connection {
     @Getter private Socket connection;
-    @Getter private HashSet<String> commands;
-    private BufferedWriter out;
-    private BufferedReader in;
+    @Getter private BufferedWriter out;
+    @Getter private BufferedReader in;
 
-    // private boolean isWorking = true;
-    private static Gson gson = new GsonBuilder().create();
+    @Getter private static Gson gson = new GsonBuilder().create();
 
     /**
      * default construct
      * 
      * @param host
      * @param port 0x0 - 0xffff ports
+     * @throws IOException 
      * @apiNote also can stop your app xd
      */
-    public Connection(String host, int port) {
         try {
             this.connection = new Socket(host, port);
             this.in = new BufferedReader(new InputStreamReader(this.connection.getInputStream()));
             this.out = new BufferedWriter(new OutputStreamWriter(this.connection.getOutputStream()));
 
-            // this.out.write(new String("getCommandSet").getBytes());
-        
         } catch (java.net.ConnectException e) {
             System.err.println("server is down.");
             System.exit(-1);
@@ -57,6 +52,10 @@ public class Connection {
             System.err.println(L18n.getGeneralBundle().getString("net.err.cant_send"));
             e.printStackTrace();
             System.exit(-1);
+        // } finally {
+        //     this.connection.close();
+        //     this.in.close();
+        //     this.out.close();
         }
     }
 
@@ -83,12 +82,13 @@ public class Connection {
                 return;
         }
 
-        if (command.getName().equals("add")) {
-            if (!command.getArgs().equals("devrnd")) // dev only
-                command.setOrg(new Serializer().serialize(NewElementHandler.newElement()));
-        }
+        // клиент не должен знать какие команды есть на сервере
+        // if (command.getName().equals("add")) {
+        // if (!command.getArgs().equals("devrnd")) // dev only
+        // command.setOrg(new Serializer().serialize(NewElementHandler.newElement()));
+        // }
 
-        else if (command.getName().equals("exit")) {
+        if (command.getName().equals("exit")) {
             this.connection.close();
             System.out.println(L18n.getGeneralBundle().getString("command.exit.message"));
             System.exit(0);
@@ -98,8 +98,15 @@ public class Connection {
             this.out.write(gson.toJson(command) + "\n");
             this.out.flush();
 
-            //костылек, но иначе надо запариваться с буффером 
-            System.out.println(this.in.readLine().replace("|||", "\n"));
+            String response = this.in.readLine();
+            // untested
+            if (response.equals("dd_need_element")) {
+                command.setOrg(new Serializer().serialize(NewElementHandler.newElement(System.in, System.out)));
+                this.out.write(gson.toJson(command) + "\n");
+                this.out.flush();
+            } else
+                // костылек, но иначе надо запариваться с буффером
+                System.out.println(response.replace("|||", "\n"));
         } catch (JsonIOException e) {
             System.err.println(L18n.getGeneralBundle().getString("json.err.cant_ser"));
         } catch (Exception e) {
@@ -111,6 +118,7 @@ public class Connection {
 
     /**
      * check connection status
+     * 
      * @return connction colosed ? false : true
      */
     public boolean isWorking() {
