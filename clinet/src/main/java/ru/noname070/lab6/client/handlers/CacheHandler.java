@@ -70,8 +70,15 @@ public class CacheHandler {
                     String response = localIn.readLine();
                     // untested
                     if (response.equals("dd_need_collection")) {
+                        // TODO зачем тут каждый раз создавать объект Serializer. Подумайте как создать его один раз
+                        // TODO и про PrintStream, зачем вообще тут это нужно? Можно вынести это в приватный метод сюда же и не делать какую то дичь
                         command.setOrg(new Serializer().serialize(NewElementHandler.newElement(commandsStream,
                                 new PrintStream(PrintStream.nullOutputStream())))); // wtf
+                        /* часть кода на 100 строчке
+                        Вот так код будет просто читабельнее
+                        command.setOrg(getOrg(commandsStream));
+                         */
+
                         localOut.write(Connection.getGson().toJson(command) + "\n");
                         localOut.flush();
                     } else
@@ -89,5 +96,13 @@ public class CacheHandler {
             e.printStackTrace();
         }
     }
+
+    /*
+    private static final PrintStream ps =  new PrintStream(PrintStream.nullOutputStream());
+    private static final Serializer serializer =  new Serializer();
+    private static String getOrg(FileInputStream commandStream){
+        return serializer.serialize(NewElementHandler.newElement(commandStream, ps));
+    }
+     */
 
 }

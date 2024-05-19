@@ -54,6 +54,7 @@ public class Serializer {
      * @param rawData raw string from xml
      */
     public LinkedList<Organization> deserialize(String rawData) {
+        // TODO Зачем дублировать код из конструктора?
         xstream.setMode(XStream.NO_REFERENCES);
         xstream.addPermission(NoTypePermission.NONE);
         xstream.addPermission(NullPermission.NULL);
