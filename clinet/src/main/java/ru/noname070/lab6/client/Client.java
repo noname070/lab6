@@ -8,7 +8,6 @@ import java.util.Scanner;
 
 import org.apache.commons.lang3.StringUtils;
 
-import ru.noname070.lab6.client.io.Authform;
 import ru.noname070.lab6.client.io.Connection;
 import ru.noname070.lab6.client.utils.L18n;
 

@@ -36,6 +36,7 @@ public class Connection {
      * @throws IOException 
      * @apiNote also can stop your app xd
      */
+    public Connection(String host, int port) {
         try {
             this.connection = new Socket(host, port);
             this.in = new BufferedReader(new InputStreamReader(this.connection.getInputStream()));
